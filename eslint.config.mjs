@@ -10,7 +10,20 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends({
+    extends: [
+      "next/core-web-vitals",
+      "next/typescript",
+      "standard",
+      "plugin:tailwindcss/recommended",
+      "prettier",
+    ],
+    rules: {
+      "react/no-unescaped-entities": "off",
+      "@next/next/no-page-custom-font": "off",
+      "no-undef": "off",
+    },
+  }),
 ];
 
 export default eslintConfig;
