@@ -9,17 +9,25 @@ import {
 } from "@/components/ui/select";
 import { usePathname, useRouter } from "next/navigation";
 import { sortTypes } from "@/constants";
+import { useState } from "react";
 
 const Sort = () => {
   const path = usePathname();
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleSort = (value: string) => {
     router.push(`${path}?sort=${value}`);
+    setIsOpen(false);
   };
 
   return (
-    <Select onValueChange={handleSort} defaultValue={sortTypes[0].value}>
+    <Select
+      onValueChange={handleSort}
+      defaultValue={sortTypes[0].value}
+      open={isOpen}
+      onOpenChange={setIsOpen}
+    >
       <SelectTrigger className="sort-select">
         <SelectValue placeholder={sortTypes[0].value} />
       </SelectTrigger>

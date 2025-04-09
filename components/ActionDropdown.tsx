@@ -41,12 +41,24 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
   const path = usePathname();
 
-  const closeAllModals = () => {
-    setIsModalOpen(false);
+  const handleOpenModal = (selectedAction: ActionType) => {
+    setAction(selectedAction);
     setIsDropdownOpen(false);
-    setAction(null);
-    setName(file.name);
-    setEmails([]);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => {
+      setAction(null);
+      setName(file.name);
+      setEmails([]);
+    }, 300);
+  };
+
+  const closeAllModals = () => {
+    handleCloseModal();
+    setIsDropdownOpen(false);
   };
 
   const handleAction = async () => {
@@ -139,7 +151,16 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
   };
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+    <Dialog
+      open={isModalOpen}
+      onOpenChange={(open) => {
+        if (!open) {
+          handleCloseModal();
+        } else {
+          setIsModalOpen(true);
+        }
+      }}
+    >
       <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
         <DropdownMenuTrigger className="shad-no-focus">
           <Image
@@ -159,14 +180,14 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
               key={actionItem.value}
               className="shad-dropdown-item"
               onClick={() => {
-                setAction(actionItem);
-
                 if (
                   ["rename", "share", "delete", "details"].includes(
                     actionItem.value
                   )
                 ) {
-                  setIsModalOpen(true);
+                  handleOpenModal(actionItem);
+                } else {
+                  setAction(actionItem);
                 }
               }}
             >
